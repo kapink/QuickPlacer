@@ -1,4 +1,11 @@
 # QuickPlacer
+## Summary
+The Quick Placer is for rapidly placing gameobjects in a scene. It is fairly straight forward and simple, but there is also the Hydro Pole Placer and Fence Placer which use the Quick Placer.
+
+The Hydro Pole Placer will place hydro/telephone poles and connect wires between them (which is simply a line renderer).
+
+The Fence Placer will place fence posts and generate a mesh connecting the posts using a provided material.
+
 ## How to use
 
 ### Quick Placer
