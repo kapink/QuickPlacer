@@ -43,6 +43,7 @@ public class HydroPolePlacerCustomInspector : QuickPlacerCustomInspector
         try { GUILayout.Label("Previous Link: " + previousInstance.name); }
         catch { GUILayout.Label("Previous Link: null"); }
 
+        EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Wires Only"))
         {
             editStatus = WiresOnly();
@@ -51,6 +52,7 @@ public class HydroPolePlacerCustomInspector : QuickPlacerCustomInspector
         {
             DestroyBrokenWires();
         }
+        EditorGUILayout.EndHorizontal();
     }
 
     /// <summary>

@@ -21,6 +21,7 @@ public class QuickPlacerCustomInspector : Editor
     // Editor
     protected bool isEditing;
     protected string editStatus = "Not Editing";
+    protected GUIStyle editingStatus = new GUIStyle();
 
     protected virtual void OnEnable()
     {
@@ -28,6 +29,7 @@ public class QuickPlacerCustomInspector : Editor
         randomRotation = serializedObject.FindProperty("randomRotation");
         snap = serializedObject.FindProperty("snap");
         SetTransform();
+        editingStatus.fontStyle = FontStyle.Bold;
     }
 
     /// <summary>
@@ -45,7 +47,8 @@ public class QuickPlacerCustomInspector : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        
+
+        EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Place Mode"))
         {
             editStatus = PlaceMode();
@@ -54,10 +57,15 @@ public class QuickPlacerCustomInspector : Editor
         {
             editStatus = StopEditing();
         }
-        
-        if(editStatus != "Not Editing")
-            GUI.color = Color.yellow;
-        GUILayout.Label("Edit Status: " + editStatus);
+        EditorGUILayout.EndHorizontal();
+
+        // Change text style
+        if (editStatus == "Not Editing")
+            editingStatus.normal.textColor = Color.black;
+        else
+            editingStatus.normal.textColor = Color.red;
+
+        GUILayout.Label("Edit Status: " + editStatus, editingStatus);
         GUI.color = Color.white;
     }
 
