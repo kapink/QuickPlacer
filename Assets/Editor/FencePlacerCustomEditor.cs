@@ -140,8 +140,8 @@ public class FencePlacerCustomEditor : QuickPlacerCustomInspector
             if (mf)
                 endPoleBounds.Encapsulate(mf.sharedMesh.bounds);
         }
-        float prevPoleHeight = startPoleBounds.size.y * heightPercent.floatValue;
-        float nextPoleHeight = endPoleBounds.size.y * heightPercent.floatValue;
+        float prevPoleHeight = from.position.y + startPoleBounds.size.y * heightPercent.floatValue;
+        float nextPoleHeight = to.position.y + endPoleBounds.size.y * heightPercent.floatValue;
         
         // Set verts
         // Note: Takes the first found mesh filter.
