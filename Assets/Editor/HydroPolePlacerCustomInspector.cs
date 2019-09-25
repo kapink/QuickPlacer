@@ -104,6 +104,19 @@ public class HydroPolePlacerCustomInspector : QuickPlacerCustomInspector
         List<Transform> children = new List<Transform>();
         hit.transform.GetComponentsInChildren(children);
         GameObject linkableObject = children.Exists(child => child.name.Contains(wireConnectingName.stringValue)) ? hit.collider.gameObject : null;
+        if(!linkableObject && hit.transform.parent != null)
+        {
+            // Not in children... look though siblings.
+            for(int i = 0; i < hit.transform.parent.childCount - 1; i++)
+            {
+                if(hit.transform.parent.GetChild(i).name.Contains(wireConnectingName.stringValue))
+                {
+                    linkableObject = hit.transform.parent.gameObject;
+                    break;
+                }
+
+            }
+        }
 
         // If we click on a hydro pole (or something with [WirePoint]), dont spawn anobject,... do this instead.
         if (linkableObject)
