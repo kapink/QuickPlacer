@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3525087875576393799}
   - component: {fileID: 1497331145537038763}
   - component: {fileID: 134236138142068264}
-  - component: {fileID: 9192442260591086439}
   m_Layer: 0
   m_Name: ChainFenceDivider_LOD0
   m_TagString: Untagged
@@ -79,20 +78,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &9192442260591086439
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 216356152917557443}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: -123857052400230313, guid: 9264a276e0bce224d8f438634b3249b5, type: 3}
 --- !u!1 &1739365771246181607
 GameObject:
   m_ObjectHideFlags: 0

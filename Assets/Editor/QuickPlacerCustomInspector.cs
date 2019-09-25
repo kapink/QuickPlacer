@@ -156,8 +156,12 @@ public class QuickPlacerCustomInspector : Editor
         instance.transform.position = hit.point;
         if (randomRotation.boolValue)
             instance.transform.Rotate(transform.up, UnityEngine.Random.Range(0f, 360f));
-        tempLayer = instance.layer;
-        instance.layer = 2;
+
+        //tempLayer = instance.layer;
+        //instance.layer = 2;
+        List<Collider> children = new List<Collider>();
+        instance.GetComponentsInChildren(children);
+        children.ForEach(collider => collider.enabled = false);
     }
 
     /// <summary>
@@ -186,7 +190,10 @@ public class QuickPlacerCustomInspector : Editor
         if (instance)
         {
             previousInstance = instance;
-            instance.layer = tempLayer;
+            //instance.layer = tempLayer;
+            List<Collider> children = new List<Collider>();
+            instance.GetComponentsInChildren(children);
+            children.ForEach(collider => collider.enabled = true);
             Undo.RegisterCreatedObjectUndo(instance, "Place Object");
         }
         instance = null;
