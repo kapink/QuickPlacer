@@ -11,13 +11,17 @@ public class HydroPolePlacerCustomInspector : QuickPlacerCustomInspector
     SerializedProperty wirePrefab;
     SerializedProperty numberOfPoints;
     SerializedProperty curve;
-    
+    SerializedProperty wireConnectingName;
+    SerializedProperty wireConnectionRadius;
+
     protected override void OnEnable()
     {
         base.OnEnable();
         wirePrefab = serializedObject.FindProperty("wirePrefab");
         numberOfPoints = serializedObject.FindProperty("numberOfPoints");
         curve = serializedObject.FindProperty("curve");
+        wireConnectingName = serializedObject.FindProperty("wireConnectingName");
+        wireConnectionRadius = serializedObject.FindProperty("wireConnectionRadius");
     }
 
     /// <summary>
@@ -99,7 +103,7 @@ public class HydroPolePlacerCustomInspector : QuickPlacerCustomInspector
     {
         List<Transform> children = new List<Transform>();
         hit.transform.GetComponentsInChildren(children);
-        GameObject linkableObject = children.Exists(child => child.name.Contains("[WirePoint]")) ? hit.collider.gameObject : null;
+        GameObject linkableObject = children.Exists(child => child.name.Contains(wireConnectingName.stringValue)) ? hit.collider.gameObject : null;
 
         // If we click on a hydro pole (or something with [WirePoint]), dont spawn anobject,... do this instead.
         if (linkableObject)
@@ -127,12 +131,12 @@ public class HydroPolePlacerCustomInspector : QuickPlacerCustomInspector
         // Get the wire points from the previous post
         List<Transform> previousPoints = new List<Transform>();
         start.GetComponentsInChildren(previousPoints);
-        previousPoints.RemoveAll(children => !children.name.Contains("[WirePoint]"));
+        previousPoints.RemoveAll(children => !children.name.Contains(wireConnectingName.stringValue));
 
         // ...and the same for the recently placed pole
         List<Transform> currentPoints = new List<Transform>();
         end.GetComponentsInChildren(currentPoints);
-        currentPoints.RemoveAll(children => !children.name.Contains("[WirePoint]"));
+        currentPoints.RemoveAll(children => !children.name.Contains(wireConnectingName.stringValue));
 
         for (int i = 0; i < previousPoints.Count; i++)
         {
@@ -169,7 +173,7 @@ public class HydroPolePlacerCustomInspector : QuickPlacerCustomInspector
         // Get all wire points
         List<Transform> wirePoints = new List<Transform>();
         transform.GetComponentsInChildren(wirePoints);
-        wirePoints.RemoveAll(point => !point.name.Contains("[WirePoint]"));
+        wirePoints.RemoveAll(point => !point.name.Contains(wireConnectingName.stringValue));
 
         // Get all line points
         List<LineRenderer> lines = new List<LineRenderer>();
@@ -184,20 +188,21 @@ public class HydroPolePlacerCustomInspector : QuickPlacerCustomInspector
             // Compare this line's start and end points to all the [WirePoint]s
             foreach (Transform wirePoint in wirePoints)
             {
+                Vector3 wirePointLocalToWire = line.transform.InverseTransformPoint(wirePoint.position);
                 // Start point 
                 // NOTE: Start point may be redundant. The start point will move with the wirepoint and be deleted with the parent. So it will always be true.
                 if (!startPointClose)
                 {
-                    float distance = Vector3.Distance(line.GetPosition(0), wirePoint.position);
-                    if (distance < 0.1f)
+                    float distance = Vector3.Distance(line.GetPosition(0), wirePointLocalToWire);
+                    if (distance < wireConnectionRadius.floatValue)
                         startPointClose = true;
                 }
 
                 //End point
                 if (!endPointClose)
                 {
-                    float distance = Vector3.Distance(line.GetPosition(line.positionCount - 1), wirePoint.position);
-                    if (distance < 0.1f)
+                    float distance = Vector3.Distance(line.GetPosition(line.positionCount - 1), wirePointLocalToWire);
+                    if (distance < wireConnectionRadius.floatValue)
                         endPointClose = true;
                 }
             }
