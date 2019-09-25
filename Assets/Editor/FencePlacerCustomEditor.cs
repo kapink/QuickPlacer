@@ -120,16 +120,21 @@ public class FencePlacerCustomEditor : QuickPlacerCustomInspector
         Vector3 startPole = Vector3.zero;
         Vector3 endPole = from.InverseTransformPoint(to.position);        // Is affected by scale.
 
+        // Trys to get the prefab root. Most cases there will be a prefab for the poles, but this is incase there is simply a scene object.
+        GameObject fromSource = PrefabUtility.GetCorrespondingObjectFromSource(from.gameObject) ?? from.gameObject;
+        GameObject toSource = PrefabUtility.GetCorrespondingObjectFromSource(to.gameObject) ?? to.gameObject;
+
         // Make bounds including all children for both poles. Ensures the percent scaling is more accurate.
-        Bounds startPoleBounds = from.GetComponentInChildren<MeshFilter>().sharedMesh.bounds;
-        foreach (Transform child in from.GetComponentsInChildren<Transform>())
+        // NOTE: Some light debugging my indicate that the foreach loops to include the children in the bounds my be unneccesary, but will keep for now.
+        Bounds startPoleBounds = fromSource.GetComponentInChildren<MeshFilter>().sharedMesh.bounds;
+        foreach (Transform child in fromSource.GetComponentsInChildren<Transform>())
         {
             MeshFilter mf = child.GetComponent<MeshFilter>();
             if (mf)
                 startPoleBounds.Encapsulate(mf.sharedMesh.bounds);
         }
-        Bounds endPoleBounds = to.GetComponentInChildren<MeshFilter>().sharedMesh.bounds;
-        foreach(Transform child in to.GetComponentsInChildren<Transform>())
+        Bounds endPoleBounds = toSource.GetComponentInChildren<MeshFilter>().sharedMesh.bounds;
+        foreach(Transform child in toSource.GetComponentsInChildren<Transform>())
         {
             MeshFilter mf = child.GetComponent<MeshFilter>();
             if (mf)
