@@ -221,7 +221,7 @@ public class HydroPolePlacerCustomInspector : QuickPlacerCustomInspector
             }
 
             if (startPointClose && endPointClose)
-                ; // TODO: Redraw wires. Need to store the start and end points and make a new method.
+                ; // TODO: Redraw wires. They may be within range, but they might not be right on top.
             else
                 toDestroy.Add(line.gameObject); //Destroy
         }
